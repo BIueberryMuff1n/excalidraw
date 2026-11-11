@@ -145,9 +145,10 @@ export const AppSidebar: React.FC = () => {
         elements: nextElements,
         captureUpdate: CaptureUpdateAction.IMMEDIATELY,
       });
-      excalidrawAPI.scrollToContent(generated, {
-        fitToViewport: true,
-        animate: true,
+      excalidrawAPI.setViewport({
+        target: generated,
+        fit: "scale-down",
+        animation: true,
       });
       setCarlStatusMsg(`Rendered ${generated.length} elements from ${label}`);
       excalidrawAPI.setToast({

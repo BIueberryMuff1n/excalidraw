@@ -74,15 +74,17 @@ export async function loadServerBoardIntoCanvas(
   excalidrawAPI.updateScene({
     elements,
     appState: {
-      ...(board.appState?.viewBackgroundColor
-        ? { viewBackgroundColor: board.appState.viewBackgroundColor }
-        : {}),
-      name: board.title || "Untitled Board",
+      viewBackgroundColor: board.appState?.viewBackgroundColor || "#ffffff",
+      name: String(board.title || "Untitled Board"),
     },
     captureUpdate: CaptureUpdateAction.IMMEDIATELY,
   });
   if (elements.length > 0) {
-    excalidrawAPI.scrollToContent(elements, { fitToViewport: true, animate: true });
+    excalidrawAPI.setViewport({
+      target: elements,
+      fit: "scale-down",
+      animation: true,
+    });
   }
   setStoredActiveBoardId(board.id);
   return { id: board.id, title: board.title || "Untitled Board" };
