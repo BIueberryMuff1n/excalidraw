@@ -9,6 +9,8 @@ import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 
 import { atom } from "../app-jotai";
 
+import { convertCarlGraphToExcalidraw } from "./carlBridge";
+
 export interface ServerBoardSummary {
   id: string;
   title: string;
@@ -64,7 +66,27 @@ export async function loadServerBoardIntoCanvas(
   const board = data?.board;
   if (!board) return null;
 
-  const elements = restoreElements(Array.isArray(board.elements) ? board.elements : [], null);
+  let rawElements = Array.isArray(board.elements) ? board.elements : [];
+  if (rawElements.length === 0 && board.id === "home-01-architecture") {
+    try {
+      const presetsRes = await fetch("/api/carl/presets", {
+        headers: { Accept: "application/json" },
+      });
+      if (presetsRes.ok) {
+        const presetsData = await presetsRes.json();
+        const fleetPreset = Array.isArray(presetsData.presets)
+          ? presetsData.presets.find((p: any) => p.id === "homeport-fleet-topology")
+          : null;
+        if (fleetPreset?.ast) {
+          rawElements = convertCarlGraphToExcalidraw(fleetPreset.ast);
+        }
+      }
+    } catch {
+      // ignore preset seed error
+    }
+  }
+
+  const elements = restoreElements(rawElements, null);
   if (board.files && typeof board.files === "object") {
     const fileValues = Object.values(board.files) as any[];
     if (fileValues.length > 0) {

@@ -253,7 +253,7 @@ async function generateMermaidWithAI(messages) {
 async function handleApi(req, res, url) {
   const pathname = url.pathname;
 
-  if (req.method === "GET" && (pathname === "/healthz" || pathname === "/api/health")) {
+  if ((req.method === "GET" || req.method === "HEAD") && (pathname === "/healthz" || pathname === "/api/health")) {
     const files = (await readdir(BOARDS_DIR).catch(() => [])).filter((f) => f.endsWith(".json"));
     return sendJson(res, 200, {
       status: "ok",
