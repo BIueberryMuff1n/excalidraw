@@ -11,9 +11,6 @@ COPY packages/fractional-indexing/package.json ./packages/fractional-indexing/
 COPY packages/laser-pointer/package.json ./packages/laser-pointer/
 COPY packages/math/package.json ./packages/math/
 COPY packages/utils/package.json ./packages/utils/
-COPY dev-docs/package.json ./dev-docs/
-COPY examples/with-nextjs/package.json ./examples/with-nextjs/
-COPY examples/with-script-in-browser/package.json ./examples/with-script-in-browser/
 
 # do not ignore optional dependencies:
 # Error: Cannot find module @rollup/rollup-linux-x64-gnu
