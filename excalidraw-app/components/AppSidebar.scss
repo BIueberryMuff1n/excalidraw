@@ -152,17 +152,20 @@
   .homeport-top-bar {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.2rem 0.45rem;
+    gap: 0.35rem;
+    padding: 0.25rem 0.5rem;
     border-radius: 0.5rem;
     background: var(--island-bg-color);
     border: 1px solid var(--default-border-color, rgba(148, 163, 184, 0.25));
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
     font-size: 0.75rem;
-    margin-right: 0.35rem;
+    margin-right: 0.25rem;
+    max-width: min(380px, 42vw);
+    box-sizing: border-box;
 
     .hp-top-title {
       font-weight: 600;
-      max-width: 160px;
+      max-width: 115px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

@@ -67,6 +67,7 @@ export async function loadServerBoardIntoCanvas(
   if (!board) return null;
 
   let rawElements = Array.isArray(board.elements) ? board.elements : [];
+  let didAutoSeed = false;
   if (rawElements.length === 0 && board.id === "home-01-architecture") {
     try {
       const presetsRes = await fetch("/api/carl/presets", {
@@ -79,6 +80,7 @@ export async function loadServerBoardIntoCanvas(
           : null;
         if (fleetPreset?.ast) {
           rawElements = convertCarlGraphToExcalidraw(fleetPreset.ast);
+          didAutoSeed = true;
         }
       }
     } catch {
@@ -107,6 +109,14 @@ export async function loadServerBoardIntoCanvas(
       fit: "scale-down",
       animation: true,
     });
+  }
+  if (didAutoSeed && elements.length > 0) {
+    saveCanvasToServerBoard(
+      board.id,
+      String(board.title || "home-01 Fleet Architecture"),
+      excalidrawAPI,
+      board.tags || ["homeport", "architecture", "carl"],
+    ).catch(() => {});
   }
   setStoredActiveBoardId(board.id);
   return { id: board.id, title: board.title || "Untitled Board" };

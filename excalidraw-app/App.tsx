@@ -606,15 +606,31 @@ const ExcalidrawWrapper = () => {
       if (targetBoard) {
         setActiveBoardId(targetBoard.id);
         setActiveBoardTitle(targetBoard.title);
+        const layoutVersionKey = "homeport_excalidraw_layout_version";
+        let needsLayoutRefresh = false;
+        try {
+          needsLayoutRefresh =
+            targetBoard.id === "home-01-architecture" &&
+            localStorage.getItem(layoutVersionKey) !== "2";
+        } catch {
+          // ignore
+        }
         if (
           !data.isExternalScene &&
-          (!data.scene?.elements || data.scene.elements.length === 0)
+          (needsLayoutRefresh ||
+            !data.scene?.elements ||
+            data.scene.elements.length === 0)
         ) {
           const loaded = await loadServerBoardIntoCanvas(
             targetBoard.id,
             excalidrawAPI,
           );
           if (loaded) {
+            try {
+              localStorage.setItem(layoutVersionKey, "2");
+            } catch {
+              // ignore
+            }
             setBoardSaveStatus("saved");
           }
         }
